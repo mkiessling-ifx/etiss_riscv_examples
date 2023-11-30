@@ -23,8 +23,22 @@
 #define ECALL_FROM_M_MODE 11
 
 #define ERROR_HALT(msg)                           \
-    printf("EXCEPTION: %s at %08X\n", msg, mepc); \
+    printf("EXCEPTION: %s at %08X (%lu)\n", msg, mepc, mcause); \
     exit(-1);
+
+
+void unhandled_interupt_handler_c(unsigned long irq)
+{
+    printf("UNHANDLED IRQ raised: %lu --> aborting\n", irq);
+    exit(-1);
+}
+
+/* the handler with the weak attribute can be "overwritten" by application code! */
+__attribute__((weak))
+void default_interupt_handler_c(unsigned long irq)
+{
+    unhandled_interupt_handler_c(irq);
+}
 
 void _trap_handler_c(unsigned long mcause, unsigned long mepc)
 {
@@ -63,6 +77,12 @@ void _trap_handler_c(unsigned long mcause, unsigned long mepc)
         ERROR_HALT("ECALL");
 
     default:
-        ERROR_HALT("Unhandled cause");
+        if (mcause & 0x80000000)
+        {
+            default_interupt_handler_c(mcause & ~0x80000000);
+            return;
+        }
+        else
+            ERROR_HALT("Unhandled cause");
     }
 }
