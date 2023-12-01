@@ -1,18 +1,9 @@
 
-function(update_config)
-    set(prefix EIF)
-    set(singleValues FILE SECTION TOPIC VALUE)
-    set(multiValues  )
+function(update_config EIF_FILE EIF_SECTION EIF_TOPIC EIF_VALUE)
 
-    include(CMakeParseArguments)
-
-    cmake_parse_arguments(${prefix}
-                    "${flags}"
-                    "${singleValues}"
-                    "${multiValues}"
-                    ${ARGN})
-
-    # TODO: add some error and sanity checking ;-)                        
+    if(NOT EXISTS ${EIF_FILE})
+        message(FATAL_ERROR "*** ERROR: File: " ${EIF_FILE} " does not exist!")
+    endif()
 
     set (EXECUTE_COMMAND python ${CMAKE_SOURCE_DIR}/cmake/configupdate.py ${EIF_FILE} ${EIF_SECTION} ${EIF_TOPIC} ${EIF_VALUE})
 

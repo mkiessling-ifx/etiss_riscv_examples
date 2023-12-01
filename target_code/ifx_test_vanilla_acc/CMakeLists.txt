@@ -11,6 +11,11 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 include(etiss_ini_file)
 SET(INI_FILE ${CMAKE_CURRENT_BINARY_DIR}/ifx_test_vanilla_acc.ini)
 
-update_config( FILE ${INI_FILE} SECTION "Plugin VanillaAccelerator" TOPIC "plugin.VanillaAccelerator.baseaddr" VALUE 0x70001000)
-update_config( FILE ${INI_FILE} SECTION "Plugin VanillaAccelerator" TOPIC "plugin.VanillaAccelerator.irqline"  VALUE ${VANILLA_IRQ})
-update_config( FILE ${INI_FILE} SECTION "BoolConfigurations"        TOPIC "arch.enable_semihosting"            VALUE true)
+
+update_config( ${INI_FILE} "Plugin VanillaAccelerator" "plugin.VanillaAccelerator.baseaddr" 0x70001000)
+
+update_config( ${INI_FILE} "Plugin VanillaAccelerator" "plugin.VanillaAccelerator.baseaddr" 0x70001000)
+update_config( ${INI_FILE} "Plugin VanillaAccelerator" "plugin.VanillaAccelerator.irqline"  ${VANILLA_IRQ})
+update_config( ${INI_FILE} "BoolConfigurations"        "arch.enable_semihosting"            true)
+update_config( ${INI_FILE} "BoolConfigurations"        "etiss.load_integrated_libraries"            true)
+
